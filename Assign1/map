@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Kaylinn (http://jsbin.com/huxeliz/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+<meta name="description" content="Assignment 1 Page 2">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Assignment 1</title>
+<style id="jsbin-css">
+li {
+  float: left;
+}
+
+a{
+  display: block;
+  padding 8px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 14px;
+  overflow: hidden;
+  background-color: #005580;
+  #005580
+}
+li a {
+  display: inline;
+  color: white;
+  font-size: 20px;
+  padding: 8px 14px 
+  
+}
+
+.active{
+  background-color: #333
+
+}
+
+
+div.a {
+  font-size: 18px;
+  
+}
+
+</style>
+</head>
+<body>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="interests.html">Interests</a></li>
+    <li><a href="map.html">Travel</a></li>
+  </ul>
+  
+  <hr>
+  <br>
+  <br><br>
+  This is my travel page! This summer I plan on going to Berlin, Germany. So here is a map of the city!.
+  
+ <br>
+  <br>
+  <img src="https://www.google.com/maps/place/Berlin,+Germany/@52.5065133,13.144551,10z/data=!3m1!4b1!4m5!3m4!1s0x47a84e373f035901:0x42120465b5e3b70!8m2!3d52.5200066!4d13.404954" />
+</body>
+</html>
