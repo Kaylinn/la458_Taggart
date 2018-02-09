@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Kaylinn (http://jsbin.com/locilen/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+<meta name="description" content="Taggart Playground 2">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Playground 2</title>
+</head>
+<body>
+  <h2> Playground 2 </h2>
+  <h3> Kaylinn Taggart </h3>
+  
+  <br>
+  <div id="doYouLikePudding">
+  <p>
+    What kind of pudding do you like?
+  </p>
+    
+    <input type="radio" name="pudding" value="tapioca"  onchange="puddingFunction()"> Tapioca<br>
+    <input type="radio" name="pudding" value="chocolate" onchange="puddingFunction()"> Chocolate<br>
+    <input type="radio" name="pudding" value="vanilla" onchange="puddingFunction()"> Vanilla<br>
+    <input type="radio" name="pudding" value="butterscotch" onchange="puddingFunction()"> Butterscotch<br>
+    
+    <br><hr>
+    <div id="references">   
+    <p>
+      Which references do you know?
+    </p>
+    
+   <form action="">
+     <input type="checkbox" name="language" id="Les Miserables" onclick="myFunction1()"> Red-the blood of angry men<br>
+     <input type="checkbox" name="language" id="Charlie and the Chocolate Factory" onclick="myFunction2()"> Violet! You're turning violet!<br>
+     <input type="checkbox" name="language" id="Shrek" onclick="myFunction3()"> I like that bolder<br>
+    
+  <br><br>
+
+    
+<p id="reaction1" style="display:none">Les Miserables:
+  <br><br>
+  The musical I need to buy because I rent it too often.<hr></p>      
+
+<p id="reaction2" style="display:none">Charlie and the Chocolate Factory:
+     <br><br>
+I just like the idea of living in a chocolate factory.<hr></p>  
+
+<p id="reaction3" style="display:none">Shrek:
+     <br><br>
+     I've seen the first Shrek more times than I care to admit. Benefit -- I can practically quote the entire thing.
+     </p>
+       <br>
+Text Box: <input type="text" name="testingTextBox" value="Have a great day!"><br><br>
+
+<p>Check out this map of Rwanda! I went on a class trip driving from Rwanda to Gisenyi, but we made more stops and it ended up being a lot longer than three hours. Rwanda is the land of 1,000 hills which was pretty amazing. A great one to put on your travel bucket list! </p>
+<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?origin=Kigali%2C%20Rwanda&destination=Gisenyi%2C%20Rwanda&key=AIzaSyCsETj4tKsLXPdxhZj47pzGql04lF76Lgc" allowfullscreen></iframe>
+  
+<script id="jsbin-javascript">
+console.clear();
+
+function puddingFunction() {
+	var puddingSelection = document.querySelector('input[name = "pudding"]:checked').value;
+	console.log(puddingSelection);
+}
+
+
+function myFunction1(){
+    checkBox = document.getElementById("Yes");
+    text = document.getElementById("reaction1");
+    if (checkBox.checked === true){
+        text.style.display="block";
+    }else{
+        text.style.display = "none";
+    }
+}
+   
+function myFunction2() {
+    checkBox = document.getElementById("No");
+    text = document.getElementById("reaction2");
+    if (checkBox.checked === true){
+        text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+}
+
+function myFunction2() {
+    checkBox = document.getElementById("No");
+    text = document.getElementById("reaction3");
+    if (checkBox.checked === true){
+        text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+}
+
+function myFunction2() {
+    checkBox = document.getElementById("No");
+    text = document.getElementById("reaction4");
+    if (checkBox.checked === true){
+        text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+}
+
+function myFunction2() {
+    checkBox = document.getElementById("No");
+    text = document.getElementById("reaction5");
+    if (checkBox.checked === true){
+        text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+}
+
+function myFunction2() {
+    checkBox = document.getElementById("No");
+    text = document.getElementById("reaction6");
+    if (checkBox.checked === true){
+        text.style.display = "block";
+    } else {
+       text.style.display = "none";
+    }
+}
+</script>
+</body>
+</html>
