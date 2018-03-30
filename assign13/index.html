@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Taggart Assignment 3</title>
+</head>
+     <Style>
+        H2 {color: darkblue;
+            padding: 0;
+            margin: 0;
+            background-color: ghostwhite;
+        }
+        H5 {color: darkblue;
+            padding: 0;
+            margin: 0;
+            background-color: ghostwhite;   
+        }
+        Body {background-color: lavender}
+    </Style>
+    
+<body>
+    <h2>Assignment 3</h2>
+    <h5>Kaylinn Taggart</h5>
+    
+    <br><br>
+    <a href="#" onclick="changeMap('index')">Basemap</a> &nbsp; &nbsp; &nbsp;
+    <a href="#" onclick="changeMap('iowaBorder')">Iowa Border</a> &nbsp; &nbsp; &nbsp;
+    <a href="#" onclick="changeMap('Confinements')">Confinements</a> &nbsp; &nbsp; &nbsp;
+    <a href="#" onclick="changeMap('CanoeRoutes')">Canoe Routes</a> &nbsp; &nbsp; &nbsp;
+    <a href="#" onclick="changeMap('nativeAmericanLands')">Native American Lands</a> &nbsp; &nbsp; &nbsp;
+    <br>
+    
+    <img id="myMap" src= "images/index.png" alt="Basemap" width: 600px; height: 400px;>
+    
+
+</body>
+    <script>
+        
+        function changeMap(x) {
+            document.getElementById("myMap").src = "images/"+ x +".png";
+            
+        }
+        
+        //changeMap(Confinements);
+        
+    
+    </script>
+</html>
