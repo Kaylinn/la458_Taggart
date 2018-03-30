@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Kaylinn (http://jsbin.com/cevobig/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <head>
+    <meta name="description" content="Assignment 13_Taggart" />
+    <title>Taggart Assignment 13.</title>
+    
+  <script src="https://code.jquery.com/jquery-2.2.4.js"></script> 
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" /> <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+
+<script src="https://indicator.extension.iastate.edu/classes/leaflet-ajax-gh-pages/dist/leaflet.ajax.min.js"></script>
+    <h4>Assignment 13 | Kaylinn Taggart</h4>
+
+    <p>This map observes some of the landfills in Vermont, U.S.<br><br>
+    The data is set up to show landfill size by the amount of acres. It also does NOT include all of the landfills in Vermont because it was too large to put in JS BIN.
+    </p>
+    
+    Map: Loads external GeoJSON AJAX data named Vermontlandfills with jQuery
+  <style id="jsbin-css">
+
+#map {
+     position: relative;
+     width: 600px;
+     height: 400px;
+     margin-top: 0px;
+     margin-right: 25px;
+	   margin-left: 25px;
+     margin-bottom: 25px;
+}
+
+#container{
+	width: 650px;
+	margin-right: 0px;
+	margin-left: 0px;
+  background-color: lavender;
+  border-color: purple;
+  border-style: dashed;
+  border-width: 4px; }
+
+#header {
+	clear: both;
+	padding: 20px;
+	background-color: lavender;
+	
+}
+
+.legend {
+    line-height: 15px;
+    color: #888;
+}
+.legend i {
+    width: 18px;
+    height: 20px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.9;
+}
+.info {
+    padding: 6px 8px;
+    font: 10px/20px Arial, sans-serif;
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+
+}
+
+</style>
+</head>
+  <div id="container">
+  <div id = "header">
+<body style="font-family:Helvetica;">
+
+
+  </div>
+<div id='map'></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+  <body>
+
+
+    
+
+
+    
+    
+    
+
+<br>
+	  
+  <script id="jsbin-javascript">
+console.clear();
+
+//Map
+var map = L.map('map').setView([44.0588, -71.5778], 7);
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 10
+}).addTo(map);
+
+//Base Layers
+
+var OSM =
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18
+});
+
+var CartoDB_DarkMatter = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+});
+
+var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+});
+
+var Esri_WorldPhysical = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+	maxZoom: 8
+});
+
+var NASAGIBS_ViirsEarthAtNight2012 = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
+	attribution: 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+	bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
+	minZoom: 1,
+	maxZoom: 8,
+	format: 'jpg',
+	time: '',
+	tilematrixset: 'GoogleMapsCompatible_Level'
+});
+
+// Overlay layers
+var Stamen_TonerLines = L.tileLayer('http://{s}.tile.stamen.com/toner-lines/{z}/{x}/{y}.png', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+	subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 20
+});
+
+var cities2 = L.layerGroup();
+
+var Lincoln = L.marker([40.825763, -96.685198]).bindPopup('Lincoln, NE').addTo(cities2),
+    Joplin = L.marker([37.084227, -94.513281]).bindPopup('Joplin, MO').addTo(cities2),
+    Ames = L.marker([42.030781, -93.631913]).bindPopup('Ames, IA').addTo(cities2),
+    Tulsa = L.marker([36.153982, -95.992775]).bindPopup('Tulsa, OK').addTo(cities2);
+
+var cities2 = L.layerGroup([Lincoln, Joplin, Ames, Tulsa]);
+
+//End cities2.
+
+
+//layer control.
+		var baseMaps = {
+			"Open Street Map": OSM,
+      "DarkBase": CartoDB_DarkMatter,
+      "Esri World Physical":Esri_WorldPhysical,
+			"Topography": OpenTopoMap,
+      "Lights At Night":NASAGIBS_ViirsEarthAtNight2012
+		};
+
+		var overlayMaps = {
+			"Stamen TonerLines": Stamen_TonerLines,
+      "Cities": cities2,
+
+		};
+
+		L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+//Everything up until this point works.
+//GeoJSON
+
+myURL='https://raw.githubusercontent.com/Kaylinn/la458_Taggart/master/data/Landfills.geojson';
+
+
+
+//base marker render-style.
+var geojsonMarker = {
+
+  color: "#ffffff",
+  weight: 2, //outline.
+  opacity: 1,
+  fillOpacity: 0.5
+};
+
+//circle color.
+function getColor(d) {
+  return d > 15 ? '#ff3399' : //50% Blue
+    d > 10 ? '#99ff33' : //60%
+    d > 1 ? '#66ccff' : //light blue
+    '#ffffff'; //white
+}
+
+var geojsonLayer = new L.GeoJSON.AJAX(myURL, {
+  pointToLayer: function(feature, latlng) {
+    return new L.CircleMarker(latlng, geojsonMarker);
+  },
+  style: function(feature) {
+
+    return {
+      radius: feature.properties.ACRES * 1.5,
+//^Pulls info from data set.
+      fillColor: getColor(feature.properties.ACRES)
+    };
+  },
+  onEachFeature: function(feature, layer) {
+    layer.bindPopup("Acres: " + feature.properties.ACRES + "<br> Sitename: " + feature.properties.SITENAME);
+  }
+}).addTo(map);
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
