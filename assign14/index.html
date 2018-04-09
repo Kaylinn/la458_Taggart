@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Playground1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Taggart Assignment 4: Playground 1</title>
+</head>
+  <h2> Playground 1
+  </h2>
+  <h5> Kaylinn Taggart
+  </h5>
+<body>
+  
+  <p>This example calls a function which performs a calculation, and returns the result:
+    <br>
+    (p1 + p2 * p3 - p4) </p>
+  <p> = </p>
+  <p id="calculation"></p>
+<Script>
+  function myFunction(p1, p2, p3, p4) {
+    
+    return p1 + p2 * p3 - p4;
+}
+document.getElementById("calculation").innerHTML = myFunction(2, 24, 12, 24);
+  </Script>
+  
+  
+  <HR>
+    
+
+
+<script>
+//make an array of objects
+var instruments = [
+    {type: "Saxophone", classification: "Reed", enjoyment: 100},
+	{type: "Oboe", classification: "Reed", enjoyment: -2},
+	{type: "Clarinet", classification: "Reed", enjoyment: 13},
+    {type: "Drum", classification: "Percussion", enjoyment: 50},
+	{type: "Marimba", classification: "Percussion", enjoyment: 1001},
+	{type: "Xylophone", classification: "Percussion", enjoyment: 1000},
+    {type: "Harp", classification: "String", enjoyment: 100},
+	{type: "Guitar", classification: "String", enjoyment: -2},
+	{type: "Cello", classification: "String", enjoyment: 13},
+    {type: "Tuba", classification: "Brass", enjoyment: 75},
+	{type: "Trumpet", classification: "Brass", enjoyment: -25},
+	{type: "Trombone", classification: "Brass", enjoyment: -25.5},
+    
+];
+
+
+var listCount = 0;
+
+
+function instrumentList() {
+	listCount = listCount + 1;
+	
+	if (listCount >= (instruments.length)) {  
+		listCount = 9;
+	}
+	
+	i = listCount;
+	document.getElementById("type").innerHTML = instruments[i].type;
+	document.getElementById("classification").innerHTML = instruments[i].classification;
+	document.getElementById("enjoyment").innerHTML = instruments[i].enjoyment;
+
+}
+
+	
+function load() {
+	document.getElementById("type").innerHTML = instruments[i].type;
+	document.getElementById("classification").innerHTML = instruments[i].classification;
+	document.getElementById("enjoyment").innerHTML = instruments[i].enjoyment;
+
+}
+
+</script>
+
+
+
+
+
+<body onload="load()">
+<input type="button" onclick="instrumentList(1)" value="Change Instruments">
+<br>
+<b>Instruments</b><br>
+Type: <span id='type'>-</span><br>
+Classification: <span id='classification'>-</span><br>
+Enjoyment: <span id='enjoyment'>-</span><br>
+
+<br>
+    
+
+    
+<HR>
+    
+    <p>
+    This section displays a loop setting.
+    </p>
+  
+
+
+<p id="Musical Instruments"></p>
+
+<script>
+var music = ["Saxophone", "Clarinet", "Oboe", "Trombone", "Tuba", "Guitar", "Trumpet", "Harp", "Cello", "Drum", "Xylophone", "Marimba"];
+    music.sort();
+var text = "";
+var i;
+for (i = 0; i < music.length; i++) {
+    text += music[i] + "<br>";
+}
+document.getElementById("Musical Instruments").innerHTML = text;
+    
+</script>
+    
+    <HR>
+        
+        
+        
+<form id="myForm" input="music">
+  Type instrument here: <input type="text" name="type" value=""><br>
+  <button onclick="myFunction()">Try it</button>
+
+<p id="Musical Instruments"></p>
+
+</form> 
+
+<p>Click the "Try it" button to display the number of elements in the form.</p>
+
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myForm").elements.length;
+    document.getElementById("music").innerHTML = "Found " + x + " elements in the form.";
+  
+</body>
+</html>
