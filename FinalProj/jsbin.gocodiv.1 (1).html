@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Kaylinn (http://jsbin.com/gocodiv/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <head>
+    <meta name="description" content="Final Project_Taggart" />
+    
+    <title>Final Project.</title>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.mis.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/k4r573n/leaflet-control-osm-geocoder/master/Control.OSMGeocoder.css" />
+  <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.css" />
+
+    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+    <script src="https://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="https://kaylinn.github.io/la458_Taggart/FinalProj/CountryData.geojson"></script>
+    <script src="https://kaylinn.github.io/la458_Taggart/FinalProj/CountryData.geojson"></script>
+        <script src="https://kaylinn.github.io/la458_Taggart/FinalProj/msfLocations.geojson"></script>
+
+    <h4>Final Project | Kaylinn Taggart</h4>
+
+    <p><br><br>
+I'm trying to understand movements and patterns of the refugee crises around the globe and overlay those data points with location data from MSF or other aid organizaitons.<br><br>
+    Map: Data is pulled from a geoJSON file using UNHCR datasets.</p>
+    
+
+  <style id="jsbin-css">
+
+#map {
+     position: relative;
+     width: 1070px;
+     height: 400px;
+     margin-top: 0px;
+     margin-right: 25px;
+	   margin-left: 25px;
+     margin-bottom: 25px;
+}
+
+#container{
+	width: 1120px;
+	margin-right: 0px;
+	margin-left: 0px;
+  background-color: #a3a3c2;
+  border-color: purple;
+  border-style: dashed;
+  border-width: 4px; }
+
+#header {
+	clear: both;
+	padding: 20px;
+	background: #a3a3c2;
+	
+}
+
+body {
+  background: lavender;
+}
+
+h4{
+  color: white;
+  font: 20px/22px Arial, sans-serif;
+  background: #a3a3c2;
+  height: 25px;
+  padding: 3px;
+    border-radius: 2px;
+}
+
+.legend {
+    line-height: 15px;
+    color: #888;
+}
+.legend i {
+    width: 18px;
+    height: 20px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.9;
+}
+.info {
+    padding: 6px 8px;
+    font: 10px/20px Arial, sans-serif;
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+
+}
+
+</style>
+</head>
+  <div id="container">
+  <div id = "header">
+<body style="font-family:Helvetica;">
+
+
+  </div>
+<div id='map'></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+  <body>
+
+    
+
+<br>
+	  
+  <script id="jsbin-javascript">
+var data;
+console.clear();
+
+var marker = ' ';
+
+//Map
+var map = L.map('map').setView([37.5531, 32.0480], 5);
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+  minZoom: 2,
+  maxZoom: 10
+}).addTo(map);
+
+//Base Layers
+
+var CartoDB_DarkMatter = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+  subdomains: 'abcd',
+  minZoom: 2,
+  maxZoom: 19
+});
+
+var OSM =
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 2,
+    maxZoom: 18
+  });
+
+
+// Overlay layers
+var Stamen_TonerLines = L.tileLayer('http://{s}.tile.stamen.com/toner-lines/{z}/{x}/{y}.png', {
+  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+  subdomains: 'abcd',
+  minZoom: 2,
+  maxZoom: 20
+});
+
+
+
+
+refugeeStat = 'https://data2.unhcr.org/api/population/get/sublocation?&geo_id=656&year=latest&sv_id=11&population_group=4797,4798';
+//default rendering options
+
+
+//set color of circle
+function getColor(d) {
+  return d > 1000 ? '#990000' : //dark red
+    d > 300 ? '#ff3300' : //lighter redish
+    d > 100 ? '#ff9933' : //orange
+    '#ffcc66'; //light orange
+}
+
+
+
+var refugeeCircles = new L.LayerGroup(); 
+
+$.ajax({
+  url: refugeeStat,
+  dataType: 'json',
+}).done(function(data) {
+  console.log(data.data[0].geomaster_name);
+  totalNumber = data.data.length;
+  console.log(totalNumber);
+  //$("#totalNumber").html(totalNumber);
+  for (var i = 0; i < totalNumber; i++) {
+    //the numbers come in as a string so have to be parsed to a number
+    lat = parseFloat(data.data[i].centroid_lat);
+    long = parseFloat(data.data[i].centroid_lon);
+    name = data.data[i].geomaster_name;
+    individuals = parseInt(data.data[i].individuals);
+    console.log(individuals);
+
+    //1, 
+
+    var circle = new L.CircleMarker([lat, long], {
+        color: 'black',
+        weight: 1,
+        //fillColor: '#bbf',
+        fillColor: getColor(individuals),
+        fillOpacity: 0.9,
+      }).bindPopup(name+ " - " + individuals)
+      .addTo(map).addTo(refugeeCircles);  
+	  //note thatthe layer control does not get a check even though the data is displayed. Thus it is added to the map below outside the loop. It seems both of theses are need for it to perform the way intended
+	  
+  }
+
+});
+
+	//msf markers
+//JSON add.
+var myGeoJSON = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Germany",
+        "Refugees": "669,482",
+        "Asylum-Seekers": "587,346",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "12,017",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.30517578125,
+          51.41291212935532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Austria",
+        "Refugees": "93,250",
+        "Asylum-Seekers": "76,409",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "937",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.765625,
+          47.68018294648414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Slovenia",
+        "Refugees": "462",
+        "Asylum-Seekers": "319",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "4",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.1171875,
+          46.195042108660154
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Croatia",
+        "Refugees": "304",
+        "Asylum-Seekers": "557",
+        "IDPs": "-",
+        "Returnees": "44",
+        "Stateless-Persons": "2,873",
+        "Others": "14,518"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.798339843749998,
+          45.521743896993634
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Serbia",
+        "Refugees": "36,522",
+        "Asylum-Seekers": "130",
+        "IDPs": "219,633",
+        "Returnees": "643",
+        "Stateless-Persons": "2,373",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20.19287109375,
+          45.182036837015886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Macedonia",
+        "Refugees": "637",
+        "Asylum-Seekers": "21",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "600",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.6265869140625,
+          41.74672584176937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Greece",
+        "Refugees": "46,427",
+        "Asylum-Seekers": "39,986",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "198",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.97265625,
+          39.690280594818034
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+      "marker-color": "#ff0000",
+        "marker-size": "small",
+        "marker-symbol": "",
+        "country": "Turkey",
+        "Refugees": "2,869,421",
+        "Asylum-Seekers": "245,955",
+        "IDPs": "-",
+        "Returnees": "-",
+        "Stateless-Persons": "780",
+        "Others": "-"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.212890625,
+          39.7240885773337
+        ]
+      }
+    }
+  ]
+}
+
+var iconMarkerURL = "http://www.googlemapsmarkers.com/v1/";
+
+ for (var i = 0; i < country.length; i++) {
+
+  console.log(country[i].name);
+
+  var marker = L.marker([country[i].lat, country[i].long], {    
+    icon: L.icon({
+      iconUrl: iconMarkerURL + country[i].iconColor,
+      iconSize:[10, 17],
+      iconAnchor:[5, 17],
+      popupAnchor:[0, -20]
+    }),
+    title: country[i].name
+  }).bindPopup("<b>"+country[i].name+"</b><br>"+country[i].popupText+".").addTo(map);
+}
+
+
+var myStyle = {
+    "color": "#000ff3",
+    "weight": 6,
+    "opacity": 2,
+};
+
+L.geoJSON(myGeoJSON, {
+    style: myStyle,
+}).addTo(map);
+
+refugeeCircles.addTo(map); 
+
+//layer control.
+var baseMaps = {
+  "DarkBase": CartoDB_DarkMatter,
+  "Open Street Map": OSM,
+
+};
+
+var overlayMaps = {
+  "Stamen TonerLines": Stamen_TonerLines,
+	"Refugee Cities": refugeeCircles,
+  "MSF Locations": myGeoJSON,
+};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
