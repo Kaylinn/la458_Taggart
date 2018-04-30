@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by Kaylinn (http://jsbin.com/qoqixil/3/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <head>
+
+<meta name="description" content="Assignment 20_Taggart" />
+
+    <title>LA 458 Assignment 20.</title>
+    
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" /> 
+	  
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <h4>LA 458 Assignment 20 | Kaylinn Taggart</h4>
+
+
+    
+  <style id="jsbin-css">
+#map {
+     position: relative;
+     width: 1070px;
+     height: 400px;
+     margin-top: 0px;
+     margin-right: 25px;
+	   margin-left: 25px;
+     margin-bottom: 25px;
+}
+
+#container{
+	width: 1120px;
+	margin-right: 0px;
+	margin-left: 0px;
+  background-color: #a3a3c2;
+  border-color: purple;
+  border-style: dashed;
+  border-width: 4px; }
+
+#header {
+	clear: both;
+	padding: 20px;
+	background: #a3a3c2;
+	
+}
+
+body {
+  background: lavender;
+}
+
+h4{
+  color: white;
+  font: 20px/22px Arial, sans-serif;
+  background: #a3a3c2;
+  height: 25px;
+  padding: 3px;
+    border-radius: 2px;
+}
+
+
+.legend {
+    line-height: 15px;
+    color: #888;
+}
+.legend i {
+    width: 18px;
+    height: 20px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.9;
+}
+.info {
+    padding: 6px 8px;
+    font: 10px/20px Arial, sans-serif;
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+
+}
+
+
+</style>
+</head>
+
+
+
+
+
+
+
+</style>
+</head>
+  <body>
+ 
+      
+<br><br>
+  <div id="container">
+  <div id = "header">
+<body style="font-family:Helvetica;">
+  <p>For Assignment 20 Mapbox I would focus on the following plugins:<br> <li>Leaflet.Shapefile to overlay specific countries along the Balkan Route .
+    <li>Leaflet.geoCSV file to overlay specific markers with refugee population information. I would create different layers for the Asylum-Seekers, IDPs, Returnees, Stateless Persons, or people classified as "other".
+      <li>I would like to create a separate layer which takes the same information and creates a heat map. Then we could see where most of the refugees are along this route without clicking on the individual country markers. </p>
+        
+        <p>The color scheme for the heat map would be red for areas with over 1000 people, yellow for 500-999, green 100-499, and blue for 1-99. </p>
+  <p>The purpose of the map is to parallel my research in my Architecture studio and would hopefully look like the image below which was created in GeoJSON. I want the map to have interactive layers though, which will be what turns into my final project.</p>
+  
+<img src= "https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/31505781_1940844049268229_7132638599190675456_n.jpg?_nc_cat=0&oh=2a7699d3a6aa40ee6a07a07ec8207e65&oe=5B57F86D"/>
+</div>
+  <script id="jsbin-javascript">
+console.clear();
+
+var map = L.map('map').setView([43, -93], 12);
+
+//set Zoom
+$("#zoomOut").click(function(){
+	map.setZoom(5);
+});
+
+// add an OpenStreetMap tile layer
+var OSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+}).addTo(map);
+
+var CartoDB_DarkMatter = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+	subdomains: 'abcd',
+  minZoom: 2,
+	maxZoom: 19
+});
+
+
+$('#geocode').click(function () {
+    myAddress = encodeURI($('#myAddress').val());
+  //address
+
+    var geocodingAPI_URL = "http://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address="+myAddress+"&benchmark=9&format=json";
+
+
+    var geocodingAPI_URL = "http://maps.googleapis.com/maps/api/geocode/json?address=" + myAddress + "&sensor=true";
+
+    console.log(geocodingAPI_URL);
+
+    //Start Geocoding
+    $.getJSON(geocodingAPI_URL, function (json) {
+        //console.log(json.results[0].address_components);
+        //console.log(json.status);
+        var address = json.results[0].formatted_address;
+        var lat = json.results[0].geometry.location.lat;
+        var long = json.results[0].geometry.location.lng;
+        console.log(address);
+        console.log(lat);
+        console.log(long);
+        var county = '';
+        $.each(json.results[0].address_components, function (i, jsonData) {
+            level = jsonData.types[0];
+            if ('administrative_area_level_2' === level.toLowerCase()) {
+                county = (jsonData.short_name);
+            }
+        });
+        console.log("Aparation Successful! Welcome to " + county + "!");
+
+
+        //Markers
+        var marker = L.marker([lat, long], {
+            draggable: false,
+            title: county,
+            opacity: 0.60,
+        }).addTo(map);
+
+        marker.bindPopup(address).openPopup();
+		
+		map.setView([lat, long]);
+
+
+    });
+}); //end geocode click function
+
+//layer control.
+		var baseMaps = {
+      "DarkBase": CartoDB_DarkMatter,
+      "Open Street Map": OSM,
+
+		};
+
+
+		L.control.layers(baseMaps).addTo(map);
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
